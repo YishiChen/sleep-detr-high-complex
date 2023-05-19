@@ -9,7 +9,7 @@ import sys
 
 from pathlib import Path
 
-sys.path.append('/home/s194277/sleep/sleep-project_grp4/detr-main')
+sys.path.append('/home/s203877/bachelor/sleep-detr-high-complex/detr-main')
 import main as detection
 import submitit
 
@@ -17,7 +17,7 @@ import submitit
 def parse_args():
     detection_parser = detection.get_args_parser()
     parser = argparse.ArgumentParser("Submitit for detection", parents=[detection_parser])
-    parser.add_argument("--ngpus", default=6, type=int, help="Number of gpus to request on each node")
+    parser.add_argument("--ngpus", default=7, type=int, help="Number of gpus to request on each node")
     parser.add_argument("--nodes", default=1, type=int, help="Number of nodes to request")
     parser.add_argument("--timeout", default=60 * 24 * 4, type=int, help="Duration of the job")
     parser.add_argument("--job_dir", default="", type=str, help="Job dir. Leave empty for automatic.")
@@ -30,8 +30,8 @@ def get_shared_folder() -> Path:
     #     p = Path(f"/checkpoint/{user}/experiments")
     #     p.mkdir(exist_ok=True)
     #     return p
-    # p = Path(f"/home/s203877/bachelor/checkpoint")
-    p = Path(f"/scratch/s194277/checkpoint")
+    p = Path(f"/home/s203877/bachelor/checkpoint")
+    #p = Path(f"/scratch/s194277/checkpoint")
     p.mkdir(exist_ok=True)
     return p
     raise RuntimeError("No shared folder available")
@@ -51,7 +51,7 @@ class Trainer(object):
         self.args = args
 
     def __call__(self):
-        sys.path.append('/home/s194277/sleep/sleep-project_grp4/detr-main')
+        sys.path.append('/home/s203877/bachelor/sleep-detr-high-complex/detr-main')
         import main as detection
 
         self._setup_gpu_args()
