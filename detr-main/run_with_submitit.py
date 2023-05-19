@@ -30,7 +30,7 @@ def get_shared_folder() -> Path:
     #     p = Path(f"/checkpoint/{user}/experiments")
     #     p.mkdir(exist_ok=True)
     #     return p
-    p = Path(f"/home/s203877/bachelor/checkpoint")
+    p = Path(f"/scratch/s203877/checkpoint")
     #p = Path(f"/scratch/s194277/checkpoint")
     p.mkdir(exist_ok=True)
     return p
