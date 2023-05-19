@@ -117,39 +117,39 @@ class Custom_Backbone(nn.Module):
         self.conv_mix = nn.Conv2d(1, C, kernel_size = (C,1))
         self.relu = nn.ReLU()
 
-        self.conv_layer1 = nn.Conv2d(C, 8*C,kernel_size=(1,3), stride=(1,2))
+        self.conv_layer1 = nn.Conv2d(C, 8*C,kernel_size=(1,3), stride=(1,1))
         self.batch_norm1 = nn.BatchNorm2d(8*C)
         
         self.max_pool1   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
-        self.conv_layer2 = nn.Conv2d(8*C, 4*8*C,kernel_size=(1,3), stride=(1,2))
+        self.conv_layer2 = nn.Conv2d(8*C, 4*8*C,kernel_size=(1,3), stride=(1,1))
         self.batch_norm2 = nn.BatchNorm2d(4*8*C)
         self.max_pool2   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
 
-        self.conv_layer3 = nn.Conv2d(4*8*C, 2*4*8*C,kernel_size=(1,3), stride=(1,2))
+        self.conv_layer3 = nn.Conv2d(4*8*C, 2*4*8*C,kernel_size=(1,3), stride=(1,1))
         self.batch_norm3 = nn.BatchNorm2d(2*4*8*C)
         self.max_pool3   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
 
-        self.conv_layer4 = nn.Conv2d(2*4*8*C, 2*2*4*8*C,kernel_size=(1,3), stride=(1,2))
+        self.conv_layer4 = nn.Conv2d(2*4*8*C, 2*2*4*8*C,kernel_size=(1,3), stride=(1,1))
         self.batch_norm4 = nn.BatchNorm2d(2*2*4*8*C)
         self.max_pool4   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
 
-        self.conv_layer5 = nn.Conv2d(2*2*4*8*C, 2*2*2*4*8*C, kernel_size=(1,3), stride=(1,2))
+        self.conv_layer5 = nn.Conv2d(2*2*4*8*C, 2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
         self.batch_norm5 = nn.BatchNorm2d(2*2*2*4*8*C)
         self.max_pool5   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
-        self.conv_layer6 = nn.Conv2d(2*2*2*4*8*C, 2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,2))
+        self.conv_layer6 = nn.Conv2d(2*2*2*4*8*C, 2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
         self.batch_norm6 = nn.BatchNorm2d(2*2*2*2*4*8*C)
         self.max_pool6   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
-        self.conv_layer7 = nn.Conv2d(2*2*2*2*4*8*C, 2*2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,2))
+        self.conv_layer7 = nn.Conv2d(2*2*2*2*4*8*C, 2*2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
         self.batch_norm7 = nn.BatchNorm2d(2*2*2*2*2*4*8*C)
         self.max_pool7   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
-        self.conv_layer8 = nn.Conv2d(2*2*2*2*2*4*8*C, 2*2*2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,2))
+        self.conv_layer8 = nn.Conv2d(2*2*2*2*2*4*8*C, 2*2*2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
         self.batch_norm8 = nn.BatchNorm2d(2*2*2*2*2*2*4*8*C)
         self.max_pool8   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
 
@@ -165,38 +165,47 @@ class Custom_Backbone(nn.Module):
         out = tensor_list.tensors
         out = self.conv_mix(out)
         out = self.relu(out)
+        
         out = self.conv_layer1(out)
         out = self.batch_norm1(out)
         out = self.relu(out)
         out = self.max_pool1(out)
+
         out = self.conv_layer2(out)
         out = self.batch_norm2(out)
         out = self.relu(out)
         out = self.max_pool2(out)
+
         out = self.conv_layer3(out)
         out = self.batch_norm3(out)
         out = self.relu(out)
         out = self.max_pool3(out)
+
         out = self.conv_layer4(out)
         out = self.batch_norm4(out)
         out = self.relu(out)
         out = self.max_pool4(out)
+
         out = self.conv_layer5(out)
         out = self.batch_norm5(out)
         out = self.relu(out)
         out = self.max_pool5(out)
+
         out = self.conv_layer6(out)
         out = self.batch_norm6(out)
         out = self.relu(out)
         out = self.max_pool6(out)
+
         out = self.conv_layer7(out)
         out = self.batch_norm7(out)
         out = self.relu(out)
         out = self.max_pool7(out)
+
         out = self.conv_layer8(out)
         out = self.batch_norm8(out)
         out = self.relu(out)
         out = self.max_pool8(out)
+
         out = self.conv_layer9(out)
         out = self.relu(out)
         out = self.conv_layer10(out)
