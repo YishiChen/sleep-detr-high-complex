@@ -105,57 +105,44 @@ class Backbone(BackboneBase):
 class Custom_Backbone(nn.Module):
     ''' OUR OWN CUSTOM BACKBONE'''
     def __init__(self, name:str, train_backbone: bool, return_interm_layers: bool, dilation: bool):
-        
 
+        self.num_channels = 2048
         super(Custom_Backbone, self).__init__()
 
         # Number of data points per channel = 128 * 600
 
-        self.num_channels = 2048
         C = 10
+        self.max_pool     = nn.MaxPool2d(kernel_size=(1, 2), stride=(1, 2))
+        self.relu         = nn.ReLU()
 
-        self.conv_mix = nn.Conv2d(1, C, kernel_size = (C,1))
-        self.relu = nn.ReLU()
+        self.conv_mix    = nn.Conv2d(1, C, kernel_size=(C, 1))
 
-        self.conv_layer1 = nn.Conv2d(C, 8*C,kernel_size=(1,3), stride=(1,1))
-        self.batch_norm1 = nn.BatchNorm2d(8*C)
-        
-        self.max_pool1   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
+        self.conv_layer1 = nn.Conv2d(1, 8, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm1 = nn.BatchNorm2d(8)
 
-        self.conv_layer2 = nn.Conv2d(8*C, 4*8*C,kernel_size=(1,3), stride=(1,2))
-        self.batch_norm2 = nn.BatchNorm2d(4*8*C)
-        self.max_pool2   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
+        self.conv_layer2 = nn.Conv2d(8, 16, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm2 = nn.BatchNorm2d(16)
 
+        self.conv_layer3 = nn.Conv2d(16, 32, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm3 = nn.BatchNorm2d(32)
 
-        self.conv_layer3 = nn.Conv2d(4*8*C, 2*4*8*C,kernel_size=(1,3), stride=(1,2))
-        self.batch_norm3 = nn.BatchNorm2d(2*4*8*C)
-        self.max_pool3   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
+        self.conv_layer4 = nn.Conv2d(32, 64, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm4 = nn.BatchNorm2d(64)
 
+        self.conv_layer5 = nn.Conv2d(64, 128, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm5 = nn.BatchNorm2d(128)
 
-        self.conv_layer4 = nn.Conv2d(2*4*8*C, 2*2*4*8*C,kernel_size=(1,3), stride=(1,2))
-        self.batch_norm4 = nn.BatchNorm2d(2*2*4*8*C)
-        self.max_pool4   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
+        self.conv_layer6 = nn.Conv2d(128, 256, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm6 = nn.BatchNorm2d(256)
 
+        self.conv_layer7 = nn.Conv2d(256, 512, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm7 = nn.BatchNorm2d(512)
 
-        self.conv_layer5 = nn.Conv2d(2*2*4*8*C, 2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
-        self.batch_norm5 = nn.BatchNorm2d(2*2*2*4*8*C)
-        self.max_pool5   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
+        self.conv_layer8 = nn.Conv2d(512, 1024, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm8 = nn.BatchNorm2d(1024)
 
-        self.conv_layer6 = nn.Conv2d(2*2*2*4*8*C, 2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,2))
-        self.batch_norm6 = nn.BatchNorm2d(2*2*2*2*4*8*C)
-        self.max_pool6   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
-
-        self.conv_layer7 = nn.Conv2d(2*2*2*2*4*8*C, 2*2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,2))
-        self.batch_norm7 = nn.BatchNorm2d(2*2*2*2*2*4*8*C)
-        self.max_pool7   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
-
-        self.conv_layer8 = nn.Conv2d(2*2*2*2*2*4*8*C, 2*2*2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
-        self.batch_norm8 = nn.BatchNorm2d(2*2*2*2*2*2*4*8*C)
-        self.max_pool8   = nn.MaxPool2d(kernel_size=(1,2), stride=(1,2))
-
-        self.conv_layer9 = nn.Conv2d(2*2*2*2*2*2*4*8*C, 2*2*2*2*4*8*C, kernel_size=(1,3), stride=(1,1))
-        self.conv_layer10 = nn.Conv2d(2*2*2*2*4*8*C, 2048, kernel_size=(1,3), stride=(1,1))
-        
+        self.conv_layer9 = nn.Conv2d(1024, 2048, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
+        self.batch_norm9 = nn.BatchNorm2d(2048)
 
         BackboneBase(self, train_backbone, self.num_channels, return_interm_layers)
 
@@ -164,53 +151,52 @@ class Custom_Backbone(nn.Module):
 
         out = tensor_list.tensors
         out = self.conv_mix(out)
-        out = self.relu(out)
-        
+        out = torch.transpose(out, 1, 2)
+
         out = self.conv_layer1(out)
-        out = self.batch_norm1(out)
         out = self.relu(out)
-        out = self.max_pool1(out)
+        out = self.max_pool(out)
+        out = self.batch_norm1(out)
 
         out = self.conv_layer2(out)
-        out = self.batch_norm2(out)
         out = self.relu(out)
-        out = self.max_pool2(out)
+        out = self.max_pool(out)
+        out = self.batch_norm2(out)
 
         out = self.conv_layer3(out)
-        out = self.batch_norm3(out)
         out = self.relu(out)
-        out = self.max_pool3(out)
+        out = self.max_pool(out)
+        out = self.batch_norm3(out)
 
         out = self.conv_layer4(out)
-        out = self.batch_norm4(out)
         out = self.relu(out)
-        out = self.max_pool4(out)
+        out = self.max_pool(out)
+        out = self.batch_norm4(out)
 
         out = self.conv_layer5(out)
-        out = self.batch_norm5(out)
         out = self.relu(out)
-        out = self.max_pool5(out)
+        out = self.max_pool(out)
+        out = self.batch_norm5(out)
 
         out = self.conv_layer6(out)
-        out = self.batch_norm6(out)
         out = self.relu(out)
-        out = self.max_pool6(out)
+        out = self.max_pool(out)
+        out = self.batch_norm6(out)
 
         out = self.conv_layer7(out)
-        out = self.batch_norm7(out)
         out = self.relu(out)
-        out = self.max_pool7(out)
+        out = self.max_pool(out)
+        out = self.batch_norm7(out)
 
         out = self.conv_layer8(out)
-        out = self.batch_norm8(out)
         out = self.relu(out)
-        out = self.max_pool8(out)
+        out = self.max_pool(out)
+        out = self.batch_norm8(out)
 
         out = self.conv_layer9(out)
         out = self.relu(out)
-        out = self.conv_layer10(out)
-        out = self.relu(out)
-
+        out = self.max_pool(out)
+        out = self.batch_norm9(out)
     
         xs = {'0': out}
 

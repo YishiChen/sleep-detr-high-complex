@@ -27,12 +27,12 @@ from mros_data.utils import collate
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
-    parser.add_argument('--lr', default=1e-4, type=float)
-    parser.add_argument('--lr_backbone', default=1e-4, type=float)
+    parser.add_argument('--lr', default=5e-4, type=float)
+    parser.add_argument('--lr_backbone', default=5e-4, type=float)
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--weight_decay', default=1e-4, type=float)
     parser.add_argument('--epochs', default=300, type=int)
-    parser.add_argument('--lr_drop', default=100, type=int)
+    parser.add_argument('--lr_drop', default=30, type=int)
     parser.add_argument('--clip_max_norm', default=0.1, type=float,
                         help='gradient clipping max norm')
 
@@ -165,8 +165,8 @@ def main(args):
     params = dict(
         data_dir=data_dir,
         batch_size=args.batch_size,
-        n_eval=400 if data_dir == "/scratch/aneol/detr-mros/" else 70,
-        n_test=300 if data_dir == "/scratch/aneol/detr-mros/" else 70,
+        n_eval=400 if data_dir == "/scratch/aneol/detr-mros/" else 1,
+        n_test=300 if data_dir == "/scratch/aneol/detr-mros/" else 1,
         num_workers=0,
         seed=1338,
         events={"ar": "Arousal", "lm": "Leg Movements", "sdb": "Sleep-disordered breathing"},
@@ -177,7 +177,7 @@ def main(args):
         factor_overlap=2,
         fs=128,
         matching_overlap=0.5,
-        n_records=2831 if data_dir == "/scratch/aneol/detr-mros/" else 355,
+        n_records=2831 if data_dir == "/scratch/aneol/detr-mros/" else 3,
         picks=['c3', 'c4', 'eogl', 'eogr', 'chin', 'legl', 'legr', "nasal", "abdo", "thor"],
         #transform=STFTTransform(fs=128, segment_size=int(4.0 * 128), step_size=int(0.5 * 128), nfft=1024,
         #                      normalize=True),
