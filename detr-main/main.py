@@ -120,6 +120,7 @@ def main(args):
     print(args)
 
     device = torch.device(args.device)
+    torch.cuda.empty_cache()
 
     # fix the seed for reproducibility
     seed = args.seed + utils.get_rank()
