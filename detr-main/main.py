@@ -193,7 +193,7 @@ def main(args):
         config={
             "lr": args.lr,
             "lr_drop": args.lr_drop,
-            "architecture": "custom_bb",
+            "architecture": "bb_highcomplex",
             "dataset": "MROS",
             "epochs": args.epochs,
             "batch_size": args.batch_size
