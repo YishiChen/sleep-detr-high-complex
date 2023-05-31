@@ -54,6 +54,8 @@ def eval_score(model, criterion, postprocessors, data_loader, base_ds, device, o
         t_idx = indices[0][1]
 
         out_prob = outputs["pred_logits"].flatten(0, 1).argmax(-1)
+        print("len giou: ", len(giou))
+        print("len target:", len(targets[0]['labels']))
 
         for i in range(len(giou)):
             label = targets[0]['labels'][t_idx[i]]
