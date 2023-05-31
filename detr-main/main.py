@@ -11,7 +11,7 @@ import wandb
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, DistributedSampler
-
+from eval_scores import eval_score
 #import datasets
 import util.misc as utils
 #from datasets import build_dataset, get_coco_api_from_dataset
@@ -100,7 +100,7 @@ def get_args_parser():
     parser.add_argument('--resume', default='', help='resume from checkpoint')
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
-    parser.add_argument('--eval', action='store_true')
+    parser.add_argument('--eval', default='True', action='store_true')
     parser.add_argument('--num_workers', default=2, type=int)
 
     # distributed training parameters
@@ -252,12 +252,16 @@ def main(args):
             lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
             args.start_epoch = checkpoint['epoch'] + 1
 
-    #if args.eval:
-        #test_stats, coco_evaluator = evaluate(model, criterion, postprocessors,
-        #                                     data_loader_val, base_ds, device, args.output_dir)
-        #if args.output_dir:
-        #    utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")
-        #return
+    if args.eval:
+        test_stats = eval_score(model, criterion, postprocessors,
+                                              data_loader_val, base_ds, device, args.output_dir, args)
+
+        '''test_stats, coco_evaluator = evaluate(model, criterion, postprocessors,
+                                             data_loader_val, base_ds, device, args.output_dir)
+        if args.output_dir:
+            utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")'''
+
+        return
 
     print(args.distributed)
     print("Start training")
