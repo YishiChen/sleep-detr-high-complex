@@ -10,6 +10,10 @@ import util.misc as utils
 from util import box_ops
 from models.matcher import build_matcher
 from tqdm import tqdm
+import torch
+from scipy.optimize import linear_sum_assignment
+from torch import nn
+from util.box_ops import box_cxcywh_to_xyxy, generalized_box_iou
 
 @torch.no_grad()
 def eval_score(model, criterion, postprocessors, data_loader, base_ds, device, output_dir, args, data_dir):
@@ -38,41 +42,59 @@ def eval_score(model, criterion, postprocessors, data_loader, base_ds, device, o
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets_new]
         outputs = model(samples)
 
-        matcher = build_matcher(args)
-        indices = matcher(outputs, targets)
-        batch_idx = torch.cat([torch.full_like(src, i) for i, (src, _) in enumerate(indices)])
-        src_idx = torch.cat([src for (src, _) in indices])
-        idx = batch_idx, src_idx
-        src_boxes = outputs['pred_boxes'][idx]
-        target_boxes = torch.cat([t['boxes'][i] for t, (_, i) in zip(targets, indices)], dim=0)
+        bs, num_queries = outputs["pred_logits"].shape[:2]
 
-        giou = torch.diag(box_ops.generalized_box_iou(
-            box_ops.box_cxcywh_to_xyxy(src_boxes),
-            box_ops.box_cxcywh_to_xyxy(target_boxes)))
+        # We flatten to compute the cost matrices in a batch
+        out_prob = outputs["pred_logits"].flatten(0, 1).softmax(-1)  # [batch_size * num_queries, num_classes]
+        out_bbox = outputs["pred_boxes"].flatten(0, 1)  # [batch_size * num_queries, 4]
 
-        out_idx = indices[0][0]
-        t_idx = indices[0][1]
+        # Also concat the target labels and boxes
+        tgt_ids = torch.cat([v["labels"] for v in targets])
+        tgt_bbox = torch.cat([v["boxes"] for v in targets])
 
-        out_prob = outputs["pred_logits"].flatten(0, 1).argmax(-1)
-        print("len giou: ", len(giou))
-        print("len target:", len(targets[0]['labels']))
+        # Compute the classification cost. Contrary to the loss, we don't use the NLL,
+        # but approximate it in 1 - proba[target class].
+        # The 1 is a constant that doesn't change the matching, it can be ommitted.
+        cost_class = -out_prob[:, tgt_ids]
+
+        # Compute the L1 cost between boxes
+        # cost_bbox = torch.cdist(out_bbox[:, [0, 2]], tgt_bbox, p=1)
+        # -- Make target y-coordinates equal to the predict to not punish model for y prediction -- #
+        cost_bbox = torch.cdist(out_bbox[:, [0, 2]], tgt_bbox[:, [0, 2]], p=1)
+
+        # Compute the giou cost betwen boxes [N, M]
+        cost_giou = -generalized_box_iou(box_cxcywh_to_xyxy(out_bbox), box_cxcywh_to_xyxy(tgt_bbox))
+
+        # Final cost matrix
+        C = 5 * cost_bbox * cost_bbox + 1 * cost_class + 2 * cost_giou
+        C = C.view(bs, num_queries, -1).cpu()
+
+        sizes = [len(v["boxes"]) for v in targets]
+        indices = [linear_sum_assignment(c[i]) for i, c in enumerate(C.split(sizes, -1))]
+
+        query_idx = indices[0][0]
+        tgt_idx = indices[0][1]
+
+        giou = -cost_giou[query_idx, tgt_idx]
+        labels = tgt_ids[tgt_idx]
+        pred_labels = out_prob.argmax(-1)[query_idx]
 
         for i in range(len(giou)):
-            label = targets[0]['labels'][t_idx[i]]
-            pred_label = out_prob[out_idx[i]]
-            if pred_label > 3:
-                pred_label = 3
+            l = labels[i]
+            pl = pred_labels[i]
+            if pl > 3:
+                pl = 3
             if giou[i] >= 0.3:
-                conf_ma[pred_label, label] += 1
-            ma_conf_noiou[pred_label, label] += 1
+                conf_ma[pl, l] += 1
+            ma_conf_noiou[pl, l] += 1
 
 
 
     if data_dir =="D:/10channel":
-        np.save('D:/predictions/' + args.backbone + '_conf_noiou.npy', ma_conf_noiou)
-        np.save('D:/predictions/' + args.backbone + '_conf_matrix.npy', conf_ma)
+        np.save('D:/predictions/' + args.backbone + 'n.npy', ma_conf_noiou)
+        np.save('D:/predictions/' + args.backbone + 'i.npy', conf_ma)
     else:
-        np.save('/scratch/s203877/' + args.backbone + '_conf_noiou.npy', ma_conf_noiou)
-        np.save('/scratch/s203877/' + args.backbone + '_conf_matrix.npy', conf_ma)
+        np.save('/scratch/s203877/' + args.backbone + 'n.npy', ma_conf_noiou)
+        np.save('/scratch/s203877/' + args.backbone + 'i.npy', conf_ma)
 
     return 'fuck off'
