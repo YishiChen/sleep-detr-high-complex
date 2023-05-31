@@ -254,7 +254,7 @@ def main(args):
 
     if args.eval:
         test_stats = eval_score(model, criterion, postprocessors,
-                                              data_loader_val, base_ds, device, args.output_dir, args)
+                                              data_loader_train, base_ds, device, args.output_dir, args, data_dir)
 
         '''test_stats, coco_evaluator = evaluate(model, criterion, postprocessors,
                                              data_loader_val, base_ds, device, args.output_dir)
