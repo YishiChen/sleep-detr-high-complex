@@ -166,7 +166,7 @@ def main(args):
         data_dir=data_dir,
         batch_size=args.batch_size,
         n_eval=200 if data_dir == "/scratch/aneol/detr-mros/" else 1,
-        n_test=2400 if data_dir == "/scratch/aneol/detr-mros/" else 1,
+        n_test=2600 if data_dir == "/scratch/aneol/detr-mros/" else 1,
         num_workers=0,
         seed=1338,
         events={"ar": "Arousal", "lm": "Leg Movements", "sdb": "Sleep-disordered breathing"},
@@ -184,21 +184,21 @@ def main(args):
         transform=None,
         scaling="robust",
     )
-    wandb.login(key='5e435a892a1324586da2f4425116de5d843168f3')
-    wandb.init(
-        # set the wandb project where this run will be logged
-        project='detr-high-complex',
+#     wandb.login(key='5e435a892a1324586da2f4425116de5d843168f3')
+#     wandb.init(
+#         # set the wandb project where this run will be logged
+#         project='detr-high-complex',
 
-        # track hyperparameters and run metadata
-        config={
-            "lr": args.lr,
-            "lr_drop": args.lr_drop,
-            "architecture": "bb_highcomplex",
-            "dataset": "MROS",
-            "epochs": args.epochs,
-            "batch_size": args.batch_size
-        }
-    )
+#         # track hyperparameters and run metadata
+#         config={
+#             "lr": args.lr,
+#             "lr_drop": args.lr_drop,
+#             "architecture": "bb_highcomplex",
+#             "dataset": "MROS",
+#             "epochs": args.epochs,
+#             "batch_size": args.batch_size
+#         }
+#     )
 
     dm = SleepEventDataModule(**params)
     dm.setup('fit')
@@ -254,7 +254,7 @@ def main(args):
 
     if args.eval:
         test_stats = eval_score(model, criterion, postprocessors,
-                                              data_loader_train, base_ds, device, args.output_dir, args, data_dir)
+                                              data_loader_val, base_ds, device, args.output_dir, args, data_dir)
 
         '''test_stats, coco_evaluator = evaluate(model, criterion, postprocessors,
                                              data_loader_val, base_ds, device, args.output_dir)
