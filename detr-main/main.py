@@ -165,8 +165,8 @@ def main(args):
     params = dict(
         data_dir=data_dir,
         batch_size=args.batch_size,
-        n_eval=400 if data_dir == "/scratch/aneol/detr-mros/" else 1,
-        n_test=300 if data_dir == "/scratch/aneol/detr-mros/" else 1,
+        n_eval=200 if data_dir == "/scratch/aneol/detr-mros/" else 1,
+        n_test=2000 if data_dir == "/scratch/aneol/detr-mros/" else 1,
         num_workers=0,
         seed=1338,
         events={"ar": "Arousal", "lm": "Leg Movements", "sdb": "Sleep-disordered breathing"},
