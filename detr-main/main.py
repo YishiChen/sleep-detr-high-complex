@@ -29,7 +29,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
     parser.add_argument('--lr', default=0.5e-4, type=float)
     parser.add_argument('--lr_backbone', default=1e-4, type=float)
-    parser.add_argument('--batch_size', default=1, type=int)
+    parser.add_argument('--batch_size', default=4, type=int)
     parser.add_argument('--weight_decay', default=1e-4, type=float)
     parser.add_argument('--epochs', default=300, type=int)
     parser.add_argument('--lr_drop', default=50, type=int)
@@ -97,8 +97,8 @@ def get_args_parser():
     parser.add_argument('--device', default='cuda',
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=42, type=int)
-    parser.add_argument('--resume', default='', help='resume from checkpoint')
-    #parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
+    #parser.add_argument('--resume', default='', help='resume from checkpoint')
+    parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
 
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
