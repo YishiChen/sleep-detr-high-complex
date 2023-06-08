@@ -97,10 +97,12 @@ def get_args_parser():
     parser.add_argument('--device', default='cuda',
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=42, type=int)
-    parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
+    parser.add_argument('--resume', default='', help='resume from checkpoint')
+    #parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
+
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
-    parser.add_argument('--eval', default='True', action='store_true')
+    parser.add_argument('--eval', default='False', action='store_true')
     parser.add_argument('--num_workers', default=0, type=int)
 
     # distributed training parameters
@@ -184,21 +186,20 @@ def main(args):
         transform=None,
         scaling="robust",
     )
-#     wandb.login(key='5e435a892a1324586da2f4425116de5d843168f3')
-#     wandb.init(
-#         # set the wandb project where this run will be logged
-#         project='detr-high-complex',
-
-#         # track hyperparameters and run metadata
-#         config={
-#             "lr": args.lr,
-#             "lr_drop": args.lr_drop,
-#             "architecture": "bb_highcomplex",
-#             "dataset": "MROS",
-#             "epochs": args.epochs,
-#             "batch_size": args.batch_size
-#         }
-#     )
+     wandb.login(key='5e435a892a1324586da2f4425116de5d843168f3')
+     wandb.init(
+         # set the wandb project where this run will be logged
+         project='detr-high-complex',
+         # track hyperparameters and run metadata
+         config={
+             "lr": args.lr,
+             "lr_drop": args.lr_drop,
+             "architecture": "bb_highcomplex",
+             "dataset": "MROS",
+             "epochs": args.epochs,
+             "batch_size": args.batch_size
+         }
+     )
 
     dm = SleepEventDataModule(**params)
     dm.setup('fit')
