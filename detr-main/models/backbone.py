@@ -118,31 +118,31 @@ class Custom_Backbone(nn.Module):
         #self.conv_mix    = nn.Conv2d(1, C, kernel_size=(C, 1))
 
         self.conv_layer1 = nn.Conv2d(1, 8, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm1 = nn.BatchNorm2d(8)
+        self.batch_norm1 = nn.BatchNorm2d(8, track_running_stats=False)
 
         self.conv_layer2 = nn.Conv2d(8, 16, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm2 = nn.BatchNorm2d(16)
+        self.batch_norm2 = nn.BatchNorm2d(16, track_running_stats=False)
 
         self.conv_layer3 = nn.Conv2d(16, 32, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm3 = nn.BatchNorm2d(32)
+        self.batch_norm3 = nn.BatchNorm2d(32, track_running_stats=False)
 
         self.conv_layer4 = nn.Conv2d(32, 64, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm4 = nn.BatchNorm2d(64)
+        self.batch_norm4 = nn.BatchNorm2d(64, track_running_stats=False)
 
         self.conv_layer5 = nn.Conv2d(64, 128, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm5 = nn.BatchNorm2d(128)
+        self.batch_norm5 = nn.BatchNorm2d(128, track_running_stats=False)
 
         self.conv_layer6 = nn.Conv2d(128, 256, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm6 = nn.BatchNorm2d(256)
+        self.batch_norm6 = nn.BatchNorm2d(256, track_running_stats=False)
 
         self.conv_layer7 = nn.Conv2d(256, 512, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm7 = nn.BatchNorm2d(512)
+        self.batch_norm7 = nn.BatchNorm2d(512, track_running_stats=False)
 
         self.conv_layer8 = nn.Conv2d(512, 1024, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm8 = nn.BatchNorm2d(1024)
+        self.batch_norm8 = nn.BatchNorm2d(1024, track_running_stats=False)
 
         self.conv_layer9 = nn.Conv2d(1024, 2048, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
-        self.batch_norm9 = nn.BatchNorm2d(2048)
+        self.batch_norm9 = nn.BatchNorm2d(2048, track_running_stats=False)
 
         BackboneBase(self, train_backbone, self.num_channels, return_interm_layers)
 
