@@ -274,7 +274,7 @@ def main(args):
 
         return
     # Remove conv
-    model.backbone[0].conv_mix = nn.Identity()
+    model_without_ddp.backbone[0].conv_mix = nn.Identity()
 
     print(args.distributed)
     print("Start training")
