@@ -151,7 +151,7 @@ class Custom_Backbone(nn.Module):
 
         out = tensor_list.tensors
         out = self.conv_mix(out)
-        out = torch.transpose(out, 1, 2)
+        #out = torch.transpose(out, 1, 2)
 
         out = self.conv_layer1(out)
         out = self.relu(out)

@@ -7,7 +7,7 @@ import random
 import time
 from pathlib import Path
 import wandb
-
+import torch.nn as nn
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, DistributedSampler
@@ -99,6 +99,8 @@ def get_args_parser():
     parser.add_argument('--seed', default=42, type=int)
     #parser.add_argument('--resume', default='', help='resume from checkpoint')
     parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
+    #parser.add_argument('--resume', default='D:/checkpoints/high_complex/checkpoint0100.pth',
+    #                    help='resume from checkpoint')
 
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
@@ -110,10 +112,23 @@ def get_args_parser():
                         help='number of distributed processes')
     parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
     parser.add_argument('--local_rank', default='Suck my penis', help='just a dummy to start training')
+    parser.add_argument('-f', default="suck my penis")
     return parser
 
 
 def main(args):
+    # data_dir = "D:/10channel"
+    # data_dir="C:/Users/Nullerh/Documents/DTU_SCHOOL_WORK/Semester7/sleep/data/processed/mros/ar"
+    # data_dir="/scratch/s194277/mros/h5"
+    data_dir="/scratch/aneol/detr-mros/"
+    #data_dir = "/scratch/s194277/mros/h5"
+    #data_dir = "/scratch/aneol/detr-mros/"
+
+    if data_dir == "D:/10channel":
+        import pathlib
+        temp = pathlib.PosixPath
+        pathlib.PosixPath = pathlib.WindowsPath
+
     utils.init_distributed_mode(args)
     print("git:\n  {}\n".format(utils.get_sha()))
 
@@ -157,12 +172,7 @@ def main(args):
     #dataset_train = build_dataset(image_set='train', args=args)
     #dataset_val = build_dataset(image_set='val', args=args)
 
-    #data_dir = "D:/10channel"
-    # data_dir="C:/Users/Nullerh/Documents/DTU_SCHOOL_WORK/Semester7/sleep/data/processed/mros/ar"
-    # data_dir="/scratch/s194277/mros/h5"
-    data_dir="/scratch/aneol/detr-mros/"
-    #data_dir = "/scratch/s194277/mros/h5"
-    #data_dir = "/scratch/aneol/detr-mros/"
+
 
     params = dict(
         data_dir=data_dir,
@@ -186,7 +196,7 @@ def main(args):
         transform=None,
         scaling="robust",
     )
-    wandb.login(key='5e435a892a1324586da2f4425116de5d843168f3')
+    '''wandb.login(key='5e435a892a1324586da2f4425116de5d843168f3')
     wandb.init(
          # set the wandb project where this run will be logged
         project='detr-high-complex',
@@ -199,7 +209,7 @@ def main(args):
             "epochs": args.epochs,
             "batch_size": args.batch_size
         }
-    )
+    )'''
 
     dm = SleepEventDataModule(**params)
     dm.setup('fit')
@@ -263,6 +273,8 @@ def main(args):
             utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")'''
 
         return
+    # Remove conv
+    model.backbone[0].conv_mix = nn.Identity()
 
     print(args.distributed)
     print("Start training")
@@ -292,7 +304,7 @@ def main(args):
         test_stats, coco_evaluator = evaluate(
             model, criterion, postprocessors, data_loader_val, base_ds, device, args.output_dir
         )
-        wandb.log({
+        '''        wandb.log({
             "train_loss": train_stats['loss'],
             "train_class_error": train_stats['class_error'],
             "train_loss_bbox": train_stats['loss_bbox'],
@@ -303,7 +315,7 @@ def main(args):
             "test_class_error": test_stats['class_error'],
             "test_loss_bbox": test_stats['loss_bbox'],
             "test_loss_giou": test_stats['loss_giou']
-        })
+        })'''
 
         log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                      **{f'test_{k}': v for k, v in test_stats.items()},

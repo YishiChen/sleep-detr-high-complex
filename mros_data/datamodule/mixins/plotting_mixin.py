@@ -15,7 +15,7 @@ logger = get_logger()
 
 
 class PlottingMixin:
-    def plot_signals(self, idx: int, channel_names: List[str] = None, ax: Optional[Axes] = None):
+    def plot_signals(self, idx: int, channel_names: List[str] = None, ax: Optional[Axes] = None, predictions = None, ind = None):
 
         # Temporarily remove transforms
         transform = getattr(self, "transform", None)
@@ -25,13 +25,15 @@ class PlottingMixin:
         record = sample["record"]
         data = sample["signal"]
         events = sample["events"]
+
         fs = self.fs
         if channel_names is None:
             channel_names = self.picks
 
         fig, ax = plot_data(
-            data, events, fs, channel_names=channel_names, title=f"{record} | No. events: {len(events)}", ax=ax
-        )
+                data, events, fs, channel_names=channel_names, title=f"{record} | No. events: {len(events)}", ax=ax,
+                predictions=predictions, ind=ind
+            )
 
         # Re-attach transform
         self.transform = transform
