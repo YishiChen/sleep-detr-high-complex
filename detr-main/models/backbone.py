@@ -115,7 +115,7 @@ class Custom_Backbone(nn.Module):
         self.max_pool     = nn.MaxPool2d(kernel_size=(1, 2), stride=(1, 2))
         self.relu         = nn.ReLU()
 
-        self.conv_mix    = nn.Conv2d(1, C, kernel_size=(C, 1))
+        #self.conv_mix    = nn.Conv2d(1, C, kernel_size=(C, 1))
 
         self.conv_layer1 = nn.Conv2d(1, 8, kernel_size=(1, 3), stride=(1, 1), padding=(0, 1))
         self.batch_norm1 = nn.BatchNorm2d(8)
@@ -150,7 +150,7 @@ class Custom_Backbone(nn.Module):
     def forward(self, tensor_list: NestedTensor):
 
         out = tensor_list.tensors
-        out = self.conv_mix(out)
+        #out = self.conv_mix(out)
         #out = torch.transpose(out, 1, 2)
 
         out = self.conv_layer1(out)
