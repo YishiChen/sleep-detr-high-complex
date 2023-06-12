@@ -98,7 +98,7 @@ def get_args_parser():
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=42, type=int)
     #parser.add_argument('--resume', default='', help='resume from checkpoint')
-    parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
+    parser.add_argument('--resume', default='/scratch/s203877/checkpoint/6313/checkpoint0080.pth', help='resume from checkpoint')
     #parser.add_argument('--resume', default='D:/checkpoints/high_complex/checkpoint0100.pth',
     #                    help='resume from checkpoint')
 
