@@ -103,7 +103,7 @@ def main():
         cpus_per_task=24,
         nodes=nodes,
         timeout_min=timeout_min,  # max is 60 * 72
-        slurm_additional_parameters={"nodelist": "comp-gpu11"}
+        slurm_additional_parameters={"nodelist": "comp-gpu12"}
     )
 
     executor.update_parameters(name="detr-high")
