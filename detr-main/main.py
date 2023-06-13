@@ -40,7 +40,7 @@ def get_args_parser():
     parser.add_argument('--frozen_weights', type=str, default=None,
                         help="Path to the pretrained model. If set, only the mask head will be trained")
     # * Backbone
-    parser.add_argument('--backbone', default='high_complex', type=str,
+    parser.add_argument('--backbone', default='no_mix', type=str,
                         help="Name of the convolutional backbone to use")
     parser.add_argument('--dilation', action='store_true',
                         help="If true, we replace stride with dilation in the last convolutional block (DC5)")
@@ -98,13 +98,13 @@ def get_args_parser():
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=42, type=int)
     #parser.add_argument('--resume', default='', help='resume from checkpoint')
-    parser.add_argument('--resume', default='/scratch/s203877/checkpoint/4835/checkpoint0100.pth', help='resume from checkpoint')
+    parser.add_argument('--resume', default='/scratch/s203877/checkpoint/6313/checkpoint0080.pth', help='resume from checkpoint')
     #parser.add_argument('--resume', default='D:/checkpoints/high_complex/checkpoint0100.pth',
     #                    help='resume from checkpoint')
 
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
-    parser.add_argument('--eval', action='store_true')
+    parser.add_argument('--eval', default='True', action='store_true')
     parser.add_argument('--num_workers', default=0, type=int)
 
     # distributed training parameters
@@ -117,9 +117,9 @@ def get_args_parser():
 
 
 def main(args):
-    # data_dir = "D:/10channel"
+    #data_dir = "D:/10channel"
     # data_dir="C:/Users/Nullerh/Documents/DTU_SCHOOL_WORK/Semester7/sleep/data/processed/mros/ar"
-    # data_dir="/scratch/s194277/mros/h5"
+    #data_dir="/scratch/s194277/mros/h5"
     data_dir="/scratch/aneol/detr-mros/"
     #data_dir = "/scratch/s194277/mros/h5"
     #data_dir = "/scratch/aneol/detr-mros/"
