@@ -1,21 +1,27 @@
 # Bachelor's thesis: DETECTION OF SLEEP EVENTS IN POLYSOMNOGRAPHY DATA BASED ON DEEP LEARNING
 
 This repo contains codeo for pre-processing of polysomnography sleep data from 2600 subjects - filtering the signal, generating
-overlapping time-windows, and generating spectrograms for multi-channel spectral representations.
+overlapping time-windows, and generating spectrograms using STFT for multi-channel spectral representations.
 
 It also includes code for a custom CNN backbone and the transformer architecture from the DETR model which can be trained end-to-end for sleep event detection.
 
 Results were published in the **Journal of Sleep Medicine: “On the use of transformer-based detection models for accurate sleep event annotation and analysis”** (Neergard et. al. 2023).
 
-Some results from the paper are given below:
+Some results from the paper are shown below:
 
-<img width="518" height="398" alt="image" src="https://github.com/user-attachments/assets/2fb2b7c0-8a85-486c-943d-07456c24a88d" />
+<p align="center">
+<img width="518" height="398" alt="image"  align="center" src="https://github.com/user-attachments/assets/2fb2b7c0-8a85-486c-943d-07456c24a88d" />
+<p/>
+<br/><br/>
 
 <img width="1177" height="474" alt="image" src="https://github.com/user-attachments/assets/bfbd41aa-93d0-44fd-a4c2-1db274f72bc1" />
 Figure: Above is an example of the model output. The first row is the annotated ground
 truth event labels, and the second row shows the model predictions. Note
 how well model predicts the bounding box location and event type given an input
 sample of PSG data
+<br/><br/><br/><br/>
+
+<img width="1098" height="904" alt="image" src="https://github.com/user-attachments/assets/2a94eeb4-170b-40ee-9eb0-72db687b2fc0" />
 
 
 # Data processing guide: MrOS Data
