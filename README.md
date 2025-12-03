@@ -1,5 +1,4 @@
-# DETECTION OF SLEEP EVENTS IN POLYSOMNOGRAPHY DATA BASED ON
-DEEP LEARNING
+# DETECTION OF SLEEP EVENTS IN POLYSOMNOGRAPHY DATA BASED ON DEEP LEARNING
 
 This repo contains code to for pre-processing of polysomnography sleep data from 2600 subjects - filtering the signal, generating
 overlapping time-windows, and generating spectrograms for multi-channel spectral representations.
