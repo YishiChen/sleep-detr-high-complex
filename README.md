@@ -3,7 +3,8 @@
 This repo contains codeo for pre-processing of polysomnography sleep data from 2600 subjects - filtering the signal, generating
 overlapping time-windows, and generating spectrograms using STFT for multi-channel spectral representations.
 
-It also includes code for a custom CNN backbone and the transformer architecture from the DETR model which can be trained end-to-end for sleep event detection.
+It also includes code for a custom CNN backbone and the transformer architecture from the DETR model which can be trained end-to-end for sleep event detection. See Nicolas Carion et al. “End-to-End Object Detection with Transformers”.
+(May 2020).
 
 Results were published in the **Journal of Sleep Medicine: “On the use of transformer-based detection models for accurate sleep event annotation and analysis”** (Neergard et. al. 2023).
 
